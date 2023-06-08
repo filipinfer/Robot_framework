@@ -20,7 +20,7 @@ Validate UnSuccesful Login
 
 *** Keywords ***
 open the browser with the Mortage payment url
-    Create Webdriver    Chrome  executable_path=/Users/ferna/Documents/chromedriver.exe
+    Create Webdriver    Chrome  executable_path=/Users/ferna/driver_robot/chromedriver.exe
     Go To   https://rahulshettyacademy.com/loginpagePractise/
     #Open Browser      https://rahulshettyacademy.com/loginpagePractise/         chrome         options=add_experimental_option("detach", True)
 
