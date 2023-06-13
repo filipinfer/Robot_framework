@@ -26,11 +26,14 @@ ${Shop_page_load}       css:.nav-link
 
 
 Validate cards display in the shopping page
-
     Fill The Login Form  ${user_name}    ${valid_password}
     Wait Until Element Is Located In The Page     ${Shop_page_load}
     Verify Card titles in the shop page
     Select the Card     BlackBerry
+
+Select the form and navigate to child window
+     Fill the login Details and form
+
 
 *** Keywords ***
 
@@ -42,18 +45,16 @@ Fill the login form
     #Sleep    5 seconds
 
 
-
 Wait Until Element Is located in the page
     [arguments]     ${element}
     wait until element is visible       ${element}
-
-
 
 
 verify error message is correct
    # ${result}=  Get Text     ${Error_Message_Login}
     #Should Be Equal As Strings    ${result}     Incorrect username/password.   # builtin
     Element Text Should Be      ${Error_Message_Login}      Incorrect username/password.
+
 
 Verify Card titles in the shop page
     @{expectedList} =   Create List     iphone X        Samsung Note 8      Nokia Edge      Blackberry
@@ -72,7 +73,7 @@ Verify Card titles in the shop page
 Select the Card
     [Arguments]     ${cardName}
     ${elements} =       Get WebElements     css:.card-title
-    ${index} =      Set Variable  
+    ${index} =      Set Variable
 
     FOR     ${element}      IN      @{elements}
             Exit For Loop If        '${cardName}' == '${element.text}'
@@ -81,6 +82,32 @@ Select the Card
 
     END
     Click Button        xpath:(//*[@class='card-footer'])[${index}]/button
+
+
+Fill the login Details and form
+     Input Text     id:username     rahulshettyacademy
+     Input Password     id:password     learning
+     Click Element      css:input[value='user']     #inform weblocator
+     Wait Until Element Is Visible      css:.modal-body
+     Click Element      okayBtn
+     Click button      id:okayBtn
+     Select From List By Value      css:select.form-control     teach   # from the dropdown
+     Select Checkbox        terms
+     Checkbox Should be Selected        terms
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
