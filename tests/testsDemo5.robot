@@ -4,97 +4,53 @@ Library    SeleniumLibrary
 Library     Collections
 Library     ../customLibraries/Shop.py
 Test Setup      open the browser with the Mortage payment url
-#Test Teardown    Close Browser
-Resource        resource.robot
-
-
+#Test Teardown    Close Browser Session
+Resource        ../PO/Generic.robot
+Resource        ../PO/Landingpage.robot
+Resource        ../PO/Shoppage.robot
+Resource        ../PO/Checkoutpage.robot
+Resource        ../PO/Confirmationpage.robot
 
 
 *** Variables ***
-${Error_Message_Login}  css:.alert-danger
-${Shop_page_load}       css:.nav-link
-@{listofProducts}       Blackberry      Nokia Edge      
+@{listofProducts}       Blackberry      Nokia Edge
+${country_name}     India
+
+
 
 *** Test Cases ***
 
+
 #Validate UnSuccesful Login
 
-   # Fill the login form  ${user_name}    ${invalid_password}
-    #Wait Until Element Is Located In The Page   ${Error_Message_Login}
-    #verify error message is correct
+   #Landingpage.Fill The Login Form  ${user_name}    ${invalid_password}
+   #Landingpage.Wait Until Element Is Located In The Page
+   #Landingpage.verify error message is correct
 
 
 Validate cards display in the shopping page
-    Fill The Login Form  ${user_name}    ${valid_password}
-    Wait Until Element Is Located In The Page     ${Shop_page_load}
-    Verify Card titles in the shop page
-    Hello World
+    Landingpage.Fill The Login Form  ${user_name}    ${valid_password}
+    Shoppage.Wait Until Element Is Located In The Page
+    Shoppage.Verify Card titles in the shop page
     Add Items To Cart And Checkout      ${listofProducts}
+    Checkoutpage.verify items in the checkout page and proceed
+    Confirmationpage.Enter the country and select the terms     ${country_name}
+    Confirmationpage.Puchase the product and Confirm the purchase
+
+
+
+
     #Select the Card     BlackBerry
 
+
+
+
+
 #Select the form and navigate to child window
-     #Fill the login Details and form
+   # Landingpage.Fill the login Details and form
 
 
-*** Keywords ***
-
-Fill the login form
-    [arguments]     ${username}     ${password}
-    Input Text      id:username   ${username}
-    Input Password  id:password   ${password}
-    Click Button    signInBtn
-    #Sleep    5 seconds
-
-
-Wait Until Element Is located in the page
-    [arguments]     ${element}
-    wait until element is visible       ${element}
-
-
-#verify error message is correct
-   # ${result}=  Get Text     ${Error_Message_Login}
-    #Should Be Equal As Strings    ${result}     Incorrect username/password.   # builtin
-    #Element Text Should Be      ${Error_Message_Login}      Incorrect username/password.
-
-
-Verify Card titles in the shop page
-    @{expectedList} =   Create List     iphone X        Samsung Note 8      Nokia Edge      Blackberry
-    @{elements} =       Get WebElements     css:.card-title
-    @{actualList} =     Create List
-
-    FOR     ${element}      IN      @{elements}
-        log     ${element.text}
-        Append To List      ${actualList}       ${element.text}
-
-    END
-    Lists Should Be Equal    ${expectedList}        ${actualList}
-
-
-
-Select the Card
-    [Arguments]     ${cardName}
-    ${elements} =       Get WebElements     css:.card-title
-    ${index} =      Set Variable        1
-
-    FOR     ${element}      IN      @{elements}
-            Exit For Loop If        '${cardName}' == '${element.text}'
-            ${index} =      Evaluate        ${index} + 1
-
-
-    END
-    Click Button        xpath:(//*[@class='card-footer'])[${index}]/button
-
-
-#Fill the login Details and form
-    # Input Text     id:username     rahulshettyacademy
-     #Input Password     id:password     learning
-    # Click Element      css:input[value='user']     #inform weblocator
-     #Wait Until Element Is Visible      css:.modal-body
-     #Click Element      okayBtn
-    # Click button      id:okayBtn
-     #Select From List By Value      css:select.form-control     teach   # from the dropdown
-     #Select Checkbox        terms
-     #Checkbox Should be Selected        terms
+#
 
 
 
